@@ -13,14 +13,17 @@ export const api = createApi({
     getKpis: build.query<Array<GetKpisResponse>, void>({
       query: () => "kpi/kpis/",
       providesTags: ["Kpis"],
+      keepUnusedDataFor: 300,
     }),
     getProducts: build.query<Array<GetProductsResponse>, void>({
       query: () => "product/products/",
       providesTags: ["Products"],
+      keepUnusedDataFor: 300,
     }),
     getTransactions: build.query<Array<GetTransactionsResponse>, void>({
       query: () => "transaction/transactions/",
       providesTags: ["Transactions"],
+      keepUnusedDataFor: 300,
     }),
   }),
 });
