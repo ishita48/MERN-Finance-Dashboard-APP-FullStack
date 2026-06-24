@@ -11,6 +11,15 @@ import { DataGrid, GridCellParams } from "@mui/x-data-grid";
 import React, { useMemo } from "react";
 import { Cell, Pie, PieChart } from "recharts";
 
+const sanitizeString = (value: unknown): string => {
+  return String(value ?? "").replace(/[<>&"']/g, "");
+};
+
+const safeAmount = (value: unknown): string => {
+  const amount = parseFloat(String(value));
+  return isNaN(amount) ? "$0.00" : `$${amount.toFixed(2)}`;
+};
+
 const Row3 = () => {
   const { palette } = useTheme();
   const pieColors = [palette.primary[800], palette.primary[500]];
@@ -44,18 +53,21 @@ const Row3 = () => {
       field: "_id",
       headerName: "id",
       flex: 1,
+      renderCell: (params: GridCellParams) => (
+        <span>{sanitizeString(params.value)}</span>
+      ),
     },
     {
       field: "expense",
       headerName: "Expense",
       flex: 0.5,
-      renderCell: (params: GridCellParams) => `$${params.value}`,
+      renderCell: (params: GridCellParams) => safeAmount(params.value),
     },
     {
       field: "price",
       headerName: "Price",
       flex: 0.5,
-      renderCell: (params: GridCellParams) => `$${params.value}`,
+      renderCell: (params: GridCellParams) => safeAmount(params.value),
     },
   ];
 
@@ -64,17 +76,23 @@ const Row3 = () => {
       field: "_id",
       headerName: "id",
       flex: 1,
+      renderCell: (params: GridCellParams) => (
+        <span>{sanitizeString(params.value)}</span>
+      ),
     },
     {
       field: "buyer",
       headerName: "Buyer",
       flex: 0.67,
+      renderCell: (params: GridCellParams) => (
+        <span>{sanitizeString(params.value)}</span>
+      ),
     },
     {
       field: "amount",
       headerName: "Amount",
       flex: 0.35,
-      renderCell: (params: GridCellParams) => `$${params.value}`,
+      renderCell: (params: GridCellParams) => safeAmount(params.value),
     },
     {
       field: "productIds",
