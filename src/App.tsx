@@ -2,11 +2,19 @@ import { Box } from "@mui/material";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { themeSettings } from "./theme";
 import Navbar from "@/scenes/navbar";
 import Dashboard from "@/scenes/dashboard";
 import Predictions from "@/scenes/predictions";
+import Login from "@/scenes/login";
+import { RootState } from "@/state/store";
+
+const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  return isAuthenticated ? element : <Navigate to="/login" replace />;
+};
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings), []);
@@ -18,8 +26,9 @@ function App() {
           <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
             <Navbar />
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/predictions" element={<Predictions />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<ProtectedRoute element={<Dashboard />} />} />
+              <Route path="/predictions" element={<ProtectedRoute element={<Predictions />} />} />
             </Routes>
           </Box>
         </ThemeProvider>
